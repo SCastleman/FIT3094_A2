@@ -34,9 +34,16 @@ public:
 	FTimerHandle TimerHandle;
 
 	//Starting/maximum health for actor
+	int MaxHealth;
+	// Current health
 	int Health;
 	//Health level at which to seek food
 	int FoodTrigger;
+
+	// Number of resources this unit has
+	int NumResource;
+	// Max resources this unit can carry
+	int MaxResource;
 
 	//Sets default values for this actor's properties
 	AGOAPActor();

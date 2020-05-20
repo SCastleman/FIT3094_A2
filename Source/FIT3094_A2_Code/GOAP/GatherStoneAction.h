@@ -45,7 +45,7 @@ private:
 	int64 TargetTime;
 
 	// How often should the timer increment. 1 = 1 second
-	const int64 Timer = 1;
+	const int64 Timer = 3;
 
 	//How many resources do we need to gather before the action is deemed complete?
 	const int32 ResourcesToGather = 20;

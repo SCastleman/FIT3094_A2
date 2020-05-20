@@ -48,5 +48,5 @@ private:
 	const int64 Timer = 1;
 
 	//How many resources do we need to gather before the action is deemed complete?
-	int32 ResourcesToGather = 50;
+	int32 ResourcesToGather = 1;
 };

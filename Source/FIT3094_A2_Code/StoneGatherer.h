@@ -30,8 +30,4 @@ public:
 	TMap<FString, bool> GetWorldState() override;
 	// Create a goal state we want to achieve. We could have multiple and pick one
 	TMap<FString, bool> CreateGoalState() override;
-
-	int NumResource;
-
-	const int MaxResource = 20;
 };

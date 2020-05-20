@@ -2,12 +2,16 @@
 
 
 #include "TreeGatherer.h"
+
+#include "GOAP/DepositAction.h"
 #include "UObject/ConstructorHelpers.h"
 
 ATreeGatherer::ATreeGatherer() : AGOAPActor()
 {
 	NumResource = 0;
+	MaxResource = 1;
 	Health = 40;
+	MaxHealth = 40;
 	FoodTrigger = 15;
 }
 
@@ -19,6 +23,10 @@ void ATreeGatherer::BeginPlay()
 	NewAction->AddPrecondition("HasResource", false);
 	NewAction->AddEffect("HasResource", true);
 	AvailableActions.Add(NewAction);
+	DepositAction* NewDepositAction = new DepositAction();
+	NewDepositAction->AddPrecondition("HasResource", true);
+	NewDepositAction->AddEffect("HasResource", false);
+	AvailableActions.Add(NewDepositAction);
 }
 
 void ATreeGatherer::Tick(float DeltaTime)

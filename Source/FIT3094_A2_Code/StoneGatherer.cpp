@@ -3,13 +3,15 @@
 
 #include "StoneGatherer.h"
 
-#include "GOAP/DepositStoneAction.h"
+#include "GOAP/DepositAction.h"
 #include "UObject/ConstructorHelpers.h"
 
 AStoneGatherer::AStoneGatherer() : AGOAPActor()
 {
 	NumResource = 0;
+	MaxResource = 20;
 	Health = 100;
+	MaxHealth = 100;
 	FoodTrigger = 40;
 }
 
@@ -21,10 +23,10 @@ void AStoneGatherer::BeginPlay()
 	GatherAction->AddPrecondition("HasResource", false);
 	GatherAction->AddEffect("HasResource", true);
 	AvailableActions.Add(GatherAction);
-	DepositStoneAction* DepositAction = new DepositStoneAction();
-	DepositAction->AddPrecondition("HasResource", true);
-	DepositAction->AddEffect("HasResource", false);
-	AvailableActions.Add(DepositAction);
+	DepositAction* NewDepositAction = new DepositAction();
+	NewDepositAction->AddPrecondition("HasResource", true);
+	NewDepositAction->AddEffect("HasResource", false);
+	AvailableActions.Add(NewDepositAction);
 }
 
 void AStoneGatherer::Tick(float DeltaTime)
