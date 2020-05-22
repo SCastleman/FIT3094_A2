@@ -4,8 +4,7 @@
 
 bool BuildAction::IsActionDone()
 {
-  if (
-    +-Builder->NumWood == 0 && Builder->NumStone == 0
+  if ( Builder->NumWood == 0 || Builder->NumStone == 0
   || (Building->WoodResources == 100 && Building->StoneResources == 100))
     return true;
   return false;
