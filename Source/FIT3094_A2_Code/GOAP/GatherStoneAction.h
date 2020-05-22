@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GOAPAction.h"
 #include "../StoneActor.h"
+#include "FIT3094_A2_Code/StoneGatherer.h"
 
 /**
  * 
@@ -38,15 +39,16 @@ private:
 	// We could also have this linked with a world controller for easier access (assignment 1)
 	TArray<AStoneActor*> ResourceList;
 
-	// How many resources we have gathered this action
-	int32 ResourcesGathered;
+	// The stone gatherer associated with this action
+	AStoneGatherer* StoneGatherer;
 
+	// The stone actor being harvested
+	AStoneActor* TargetStone;
+	
 	// The timer we use for determining when to collect resources (Timer based)
 	int64 TargetTime;
 
 	// How often should the timer increment. 1 = 1 second
 	const int64 Timer = 3;
 
-	//How many resources do we need to gather before the action is deemed complete?
-	const int32 ResourcesToGather = 20;
 };

@@ -4,6 +4,7 @@
 #include "TreeGatherer.h"
 
 #include "GOAP/DepositAction.h"
+#include "GOAP/GatherTreeAction.h"
 #include "UObject/ConstructorHelpers.h"
 
 ATreeGatherer::ATreeGatherer() : AGOAPActor()

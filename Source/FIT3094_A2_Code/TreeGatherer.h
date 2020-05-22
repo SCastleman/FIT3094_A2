@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GOAP/AGOAPActor.h"
 #include "Components/StaticMeshComponent.h"
-#include "GOAP/GatherTreeAction.h"
 #include "TreeGatherer.generated.h"
 
 /**
@@ -15,9 +14,6 @@ UCLASS()
 class FIT3094_A2_CODE_API ATreeGatherer : public AGOAPActor
 {
 	GENERATED_BODY()
-	UPROPERTY(EditAnywhere)
-		UStaticMeshComponent* VisibleComponent;
-protected:
 	virtual void BeginPlay() override;
 
 public:

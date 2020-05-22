@@ -4,13 +4,13 @@
 #include "StoneGatherer.h"
 
 #include "GOAP/DepositAction.h"
-#include "UObject/ConstructorHelpers.h"
+#include "GOAP/GatherStoneAction.h"
 
 AStoneGatherer::AStoneGatherer() : AGOAPActor()
 {
 	NumResource = 0;
-	MaxResource = 20;
-	Health = 100;
+	MaxResource = 1;
+	Health = 40;
 	MaxHealth = 100;
 	FoodTrigger = 40;
 }

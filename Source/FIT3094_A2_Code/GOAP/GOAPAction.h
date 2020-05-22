@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 
-//Forward dewclaration of the GOAP actor. Include is in CPP file
+//Forward declaration of the GOAP actor. Include it in CPP file
 //This avoids dependency loops
 class AGOAPActor;
 /**

@@ -23,6 +23,7 @@ bool PickupMaterialsAction::CheckProceduralPrecondition(AGOAPActor* Agent)
 
 bool PickupMaterialsAction::PerformAction(AGOAPActor* Agent)
 {
+  // Only pick up resources if it would be holding the maximum amount it can carry
   if (VillageCentre->WoodResources >= Builder->MaxWood - Builder->NumWood
     && VillageCentre->StoneResources >= Builder->MaxStone - Builder->NumStone)
   {

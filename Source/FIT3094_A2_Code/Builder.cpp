@@ -7,7 +7,7 @@
 #include "GOAP/BuildAction.h"
 #include "GOAP/PickupMaterialsAction.h"
 
-ABuilder::~ABuilder()
+ABuilder::ABuilder() : AGOAPActor()
 {
   Health = 400;
   MaxHealth = 400;
@@ -21,9 +21,11 @@ void ABuilder::BeginPlay()
 	PickupMaterialsAction* PickupMaterials = new PickupMaterialsAction();
 	PickupMaterials->AddPrecondition("HasResources", false);
 	PickupMaterials->AddEffect("HasResources", true);
+	AvailableActions.Add(PickupMaterials);
 	BuildAction* NewBuildAction = new BuildAction();
 	NewBuildAction->AddPrecondition("HasResources", true);
 	NewBuildAction->AddEffect("HasResources", false);
+	AvailableActions.Add(NewBuildAction);
 }
 
 TMap<FString, bool> ABuilder::GetWorldState()
@@ -37,14 +39,6 @@ TMap<FString, bool> ABuilder::CreateGoalState()
 {
 	TMap<FString, bool> GoalState;
 	return GoalState;
-}
-
-void ABuilder::OnPlanFailed(TMap<FString, bool> FailedGoalState)
-{
-}
-
-void ABuilder::OnPlanAborted(GOAPAction* FailedAction)
-{
 }
 
 void ABuilder::Tick(float DeltaTime)

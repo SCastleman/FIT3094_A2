@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GOAPAction.h"
 #include "../TreeActor.h"
+#include "FIT3094_A2_Code/TreeGatherer.h"
 
 /**
  * 
@@ -38,15 +39,15 @@ private:
 	// We could also have this linked with a world controller for easier access (assignment 1)
 	TArray<ATreeActor*> ResourceList;
 
-	// How many resources we have gathered this action
-	int32 ResourcesGathered;
+	// The gatherer associated with this action
+	ATreeGatherer* TreeGatherer;
 
+	// The tree this actor is cutting down
+	ATreeActor* TargetTree;
+	
 	// The timer we use for determining when to collect resources (Timer based)
 	int64 TargetTime;
 
 	// How often should the timer increment. 1 = 1 second
 	const int64 Timer = 1;
-
-	//How many resources do we need to gather before the action is deemed complete?
-	int32 ResourcesToGather = 1;
 };

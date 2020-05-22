@@ -1,49 +1,38 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "GatherTreeAction.h"
-#include "../TreeGatherer.h"
+﻿#include "PickupFoodAction.h"
 #include "AGOAPActor.h"
 #include "Kismet/GameplayStatics.h"
 
-GatherTreeAction::GatherTreeAction()
+bool PickupFoodAction::IsActionDone()
 {
-  Reset();
-}
-
-GatherTreeAction::~GatherTreeAction()
-{
-}
-
-bool GatherTreeAction::IsActionDone()
-{
-  if (TreeGatherer->NumResource >= TreeGatherer->MaxResource)
+  if (Gatherer->Health >= Gatherer->MaxHealth)
     return true;
   return false;
 }
 
-bool GatherTreeAction::CheckProceduralPrecondition(AGOAPActor* Agent)
+bool PickupFoodAction::CheckProceduralPrecondition(AGOAPActor* Agent)
 {
-  TreeGatherer = Cast<ATreeGatherer>(Agent);
+  if (Agent->Health > Agent->FoodTrigger)
+    return false;
   //If we do not already have the resources stored then find some
+  Gatherer = Agent;
   if (ResourceList.Num() == 0)
   {
     //List of overlaps with other actors we are about to generate
     TArray<AActor*> TempResources;
 
     //Get all stone actors in the world
-    UGameplayStatics::GetAllActorsOfClass(Agent->GetWorld(), ATreeActor::StaticClass(), TempResources);
+    UGameplayStatics::GetAllActorsOfClass(Agent->GetWorld(), AFoodActor::StaticClass(), TempResources);
 
      // Cast all as trees and add to the ResourceList array
     for (auto Actor : TempResources)
     {
-      ATreeActor* ResourcePointer = Cast<ATreeActor>(Actor);
+      AFoodActor* ResourcePointer = Cast<AFoodActor>(Actor);
       if (ResourcePointer) ResourceList.Add(ResourcePointer);
     }
   }
 
   //For each resource available
-  ATreeActor* NearestResource = nullptr;
+  AFoodActor* NearestResource = nullptr;
   for (auto Resource : ResourceList)
   {
     //If we already have a resource
@@ -63,7 +52,7 @@ bool GatherTreeAction::CheckProceduralPrecondition(AGOAPActor* Agent)
   {
     // Set the actions target to be this resource and return true
     Target = NearestResource;
-    TargetTree = NearestResource;
+    TargetFood = NearestResource;
     return true;
   }
 
@@ -71,33 +60,28 @@ bool GatherTreeAction::CheckProceduralPrecondition(AGOAPActor* Agent)
   return false;
 }
 
-bool GatherTreeAction::PerformAction(AGOAPActor* Agent)
+bool PickupFoodAction::PerformAction(AGOAPActor* Agent)
 {
-  if (!TargetTree)
-    return false;
-  if (FDateTime::UtcNow().ToUnixTimestamp() > TargetTime)
-  {
-    TargetTree->WoodResources -= 1;
-    TreeGatherer->NumResource += 1;
-
+  if (!TargetTime)
     TargetTime = FDateTime::UtcNow().ToUnixTimestamp() + Timer;
+  int64 CurrentTime = FDateTime::UtcNow().ToUnixTimestamp();
+  if (CurrentTime >= TargetTime)
+  {
+    Agent->Health = Agent->MaxHealth;
+    TargetFood->Destroy();
   }
-
   return true;
 }
 
-bool GatherTreeAction::RequiresInRange()
+bool PickupFoodAction::RequiresInRange()
 {
   return true;
 }
 
-void GatherTreeAction::Reset()
+void PickupFoodAction::Reset()
 {
-  SetInRange(false);
+  ResourceList.Empty();
   Target = nullptr;
-  TargetTime = FDateTime::UtcNow().ToUnixTimestamp() + Timer;
+  TargetTime = NULL;
+  TargetFood = nullptr;
 }
-
-
-
-

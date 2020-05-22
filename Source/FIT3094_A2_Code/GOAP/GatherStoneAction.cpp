@@ -17,13 +17,14 @@ GatherStoneAction::~GatherStoneAction()
 
 bool GatherStoneAction::IsActionDone()
 {
-  if (ResourcesGathered >= ResourcesToGather) 
+  if (StoneGatherer->NumResource >= StoneGatherer->MaxResource) 
     return true;
   return false;
 }
 
 bool GatherStoneAction::CheckProceduralPrecondition(AGOAPActor* Agent)
 {
+  StoneGatherer = Cast<AStoneGatherer>(Agent);
   //If we do not already have the resources stored then find some
   if (ResourceList.Num() == 0)
   {
@@ -72,12 +73,14 @@ bool GatherStoneAction::CheckProceduralPrecondition(AGOAPActor* Agent)
 
 bool GatherStoneAction::PerformAction(AGOAPActor* Agent)
 {
+  // Make sure the target stone still exists
+  if (!TargetStone)
+    return false;
   AStoneActor* Resource = Cast<AStoneActor>(Target);
   AStoneGatherer* Gatherer = Cast<AStoneGatherer>(Agent);
   if (!Resource || !Gatherer) return false;
   if (FDateTime::UtcNow().ToUnixTimestamp() > TargetTime)
   {
-    ResourcesGathered += 1;
     Resource->StoneResources -= 1;
     Gatherer->NumResource += 1;
 
@@ -96,7 +99,6 @@ void GatherStoneAction::Reset()
 {
   SetInRange(false);
   Target = nullptr;
-  ResourcesGathered = 0;
   TargetTime = FDateTime::UtcNow().ToUnixTimestamp() + Timer;
 }
 

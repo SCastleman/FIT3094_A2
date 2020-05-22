@@ -3,6 +3,7 @@
 
 #include "AGOAPActor.h"
 #include "GOAPPlanner.h"
+#include "PickupFoodAction.h"
 
 AGOAPActor::AGOAPActor()
 {
@@ -24,7 +25,6 @@ void AGOAPActor::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &AGOAPActor::DecreaseHealth, 2.0f, true, 2.0f);
-
 }
 
 void AGOAPActor::Tick(float DeltaTime)
@@ -38,10 +38,19 @@ void AGOAPActor::DecreaseHealth()
 		// Decrease health by one and if 0 then destroy object
 	Health--;
 
+	if (Health < FoodTrigger)
+	{
+		CurrentActions.Empty();
+		PickupFoodAction* PickupFood = new PickupFoodAction;
+		// We know it will be true, but this populates important values in the action
+		if (PickupFood->CheckProceduralPrecondition(this))
+			CurrentActions.Enqueue(PickupFood);
+	}
+	
 	if(Health <= 0)
 	{
 		GetWorldTimerManager().ClearTimer(TimerHandle);
-		Destroy();
+		// Destroy();
 	}
 }
 
@@ -116,7 +125,6 @@ void AGOAPActor::OnMoveExit()
 
 void AGOAPActor::OnActionEnter()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ActionEnter triggered"));
 }
 
 void AGOAPActor::OnActionUpdate(float DeltaTime)
@@ -170,18 +178,16 @@ TMap<FString, bool> AGOAPActor::CreateGoalState()
 {
 
 	TMap<FString, bool> GoalState;
+	GoalState.Add("HasResources", false);
 	return GoalState;
 }
 
 void AGOAPActor::OnPlanFailed(TMap<FString, bool> FailedGoalState)
 {
+	ActionStateMachine->ChangeState(State_Idle);
 }
 
 void AGOAPActor::OnPlanAborted(GOAPAction* FailedAction)
 {
+	ActionStateMachine->ChangeState(State_Idle);
 }
-
-
-
-
-

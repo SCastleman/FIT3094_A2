@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GOAP/AGOAPActor.h"
 #include "Components/StaticMeshComponent.h"
-#include "GOAP/GatherStoneAction.h"
 #include "StoneGatherer.generated.h"
 
 /**
