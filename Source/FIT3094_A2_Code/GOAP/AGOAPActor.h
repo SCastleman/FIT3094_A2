@@ -40,6 +40,8 @@ public:
 	//Health level at which to seek food
 	int FoodTrigger;
 
+	int ToolHealth = 0;
+
 	// Number of resources this unit has
 	int NumResource;
 	// Max resources this unit can carry

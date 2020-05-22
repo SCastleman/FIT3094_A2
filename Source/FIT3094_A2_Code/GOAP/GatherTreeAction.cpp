@@ -24,6 +24,8 @@ bool GatherTreeAction::IsActionDone()
 
 bool GatherTreeAction::CheckProceduralPrecondition(AGOAPActor* Agent)
 {
+  if (Agent->ToolHealth == 0)
+    return false;
   TreeGatherer = Cast<ATreeGatherer>(Agent);
   //If we do not already have the resources stored then find some
   if (ResourceList.Num() == 0)
@@ -73,12 +75,13 @@ bool GatherTreeAction::CheckProceduralPrecondition(AGOAPActor* Agent)
 
 bool GatherTreeAction::PerformAction(AGOAPActor* Agent)
 {
-  if (!TargetTree)
+  if (!TargetTree || Agent->ToolHealth == 0)
     return false;
   if (FDateTime::UtcNow().ToUnixTimestamp() > TargetTime)
   {
     TargetTree->WoodResources -= 1;
     TreeGatherer->NumResource += 1;
+    TreeGatherer->ToolHealth -= 1;
 
     TargetTime = FDateTime::UtcNow().ToUnixTimestamp() + Timer;
   }
@@ -95,6 +98,7 @@ void GatherTreeAction::Reset()
 {
   SetInRange(false);
   Target = nullptr;
+  TargetTree = nullptr;
   TargetTime = FDateTime::UtcNow().ToUnixTimestamp() + Timer;
 }
 

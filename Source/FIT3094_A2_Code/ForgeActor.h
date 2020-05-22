@@ -15,14 +15,13 @@ class FIT3094_A2_CODE_API AForgeActor : public AActor
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* VisibleComponent;
 
-	UPROPERTY(EditAnywhere, Category = "Resources")
-		int MetalResources = 0;
-
-	
 public:	
 	// Sets default values for this actor's properties
 	AForgeActor();
 
+	UPROPERTY(EditAnywhere, Category = "Resources")
+		int MetalResources = 0;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

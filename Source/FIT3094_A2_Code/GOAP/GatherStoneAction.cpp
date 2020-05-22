@@ -74,7 +74,7 @@ bool GatherStoneAction::CheckProceduralPrecondition(AGOAPActor* Agent)
 bool GatherStoneAction::PerformAction(AGOAPActor* Agent)
 {
   // Make sure the target stone still exists
-  if (!TargetStone)
+  if (!TargetStone || Agent->ToolHealth == 0)
     return false;
   AStoneActor* Resource = Cast<AStoneActor>(Target);
   AStoneGatherer* Gatherer = Cast<AStoneGatherer>(Agent);
@@ -83,10 +83,9 @@ bool GatherStoneAction::PerformAction(AGOAPActor* Agent)
   {
     Resource->StoneResources -= 1;
     Gatherer->NumResource += 1;
-
+    Gatherer->ToolHealth -= 1;
     TargetTime = FDateTime::UtcNow().ToUnixTimestamp() + Timer;
   }
-
   return true;
 }
 

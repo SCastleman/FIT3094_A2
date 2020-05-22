@@ -15,12 +15,12 @@ class FIT3094_A2_CODE_API AMineActor : public AActor
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* VisibleComponent;
 
-	UPROPERTY(EditAnywhere, Category = "Resources")
-		int MetalResources = 50;
-
 public:	
 	// Sets default values for this actor's properties
 	AMineActor();
+
+	UPROPERTY(EditAnywhere, Category = "Resources")
+		int MetalResources = 50;
 
 protected:
 	// Called when the game starts or when spawned

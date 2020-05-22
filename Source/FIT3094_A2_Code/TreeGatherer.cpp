@@ -5,12 +5,13 @@
 
 #include "GOAP/DepositAction.h"
 #include "GOAP/GatherTreeAction.h"
-#include "UObject/ConstructorHelpers.h"
+#include "GOAP/PickupToolAction.h"
+#include "Kismet/GameplayStatics.h"
 
 ATreeGatherer::ATreeGatherer() : AGOAPActor()
 {
 	NumResource = 0;
-	MaxResource = 1;
+	MaxResource = 50;
 	Health = 40;
 	MaxHealth = 40;
 	FoodTrigger = 15;
@@ -20,8 +21,14 @@ void ATreeGatherer::BeginPlay()
 {
 	Super::BeginPlay();
 	PrimaryActorTick.bCanEverTick = true;
+	PickupToolAction* PickupTool = new PickupToolAction();
+	PickupTool->AddPrecondition("HasTool", false);
+	PickupTool->AddPrecondition("VillageHasTool", true);
+	PickupTool->AddEffect("HasTool", true);
+	AvailableActions.Add(PickupTool);
 	GatherTreeAction* NewAction = new GatherTreeAction();
 	NewAction->AddPrecondition("HasResource", false);
+	NewAction->AddPrecondition("HasTool", true);
 	NewAction->AddEffect("HasResource", true);
 	AvailableActions.Add(NewAction);
 	DepositAction* NewDepositAction = new DepositAction();
@@ -39,7 +46,10 @@ TMap<FString, bool> ATreeGatherer::GetWorldState()
 {
 	TMap<FString, bool> WorldState = Super::GetWorldState();
 
-	WorldState.Add("HasResource", NumResource > 0) ;
+	AVillageCentreActor* TempVillage = Cast<AVillageCentreActor>(UGameplayStatics::GetActorOfClass(this->GetWorld(), AVillageCentreActor::StaticClass()));
+	WorldState.Add("VillageHasTool", TempVillage->Tools > 0);
+	WorldState.Add("HasResource", NumResource == MaxResource);
+	WorldState.Add("HasTool", ToolHealth > 0);
 
 	return WorldState;
 }

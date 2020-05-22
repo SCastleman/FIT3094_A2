@@ -1,6 +1,7 @@
 ﻿#include "DepositAction.h"
 
 #include "FIT3094_A2_Code/StoneGatherer.h"
+#include "FIT3094_A2_Code/ToolCrafter.h"
 #include "FIT3094_A2_Code/TreeGatherer.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -23,7 +24,7 @@ bool DepositAction::IsActionDone()
 bool DepositAction::CheckProceduralPrecondition(AGOAPActor* Agent)
 {
   TargetResources = &Agent->NumResource;
-  if (Agent->NumResource != Agent->MaxResource)
+  if (Agent->NumResource < Agent->MaxResource)
     return false;
   AActor* TempVillage = UGameplayStatics::GetActorOfClass(Agent, AVillageCentreActor::StaticClass());
   VillageCentre = Cast<AVillageCentreActor>(TempVillage);
@@ -42,6 +43,8 @@ bool DepositAction::PerformAction(AGOAPActor* Agent)
     VillageCentre->StoneResources += Agent->NumResource;
   else if (Cast<ATreeGatherer>(Agent))
     VillageCentre->WoodResources += Agent->NumResource;
+  else if (Cast<AToolCrafter>(Agent))
+    VillageCentre->Tools += Agent->NumResource;
   else // If the cast fails for some reason the action should also fail
     return false;
 

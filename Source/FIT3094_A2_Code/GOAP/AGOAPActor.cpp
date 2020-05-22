@@ -50,7 +50,7 @@ void AGOAPActor::DecreaseHealth()
 	if(Health <= 0)
 	{
 		GetWorldTimerManager().ClearTimer(TimerHandle);
-		// Destroy();
+		Destroy();
 	}
 }
 
